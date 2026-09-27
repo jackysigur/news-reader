@@ -69,10 +69,19 @@ def get_latest_email_text():
             # 刪除內文的星號
             body_text = body_text.replace('*', '')
             
-            # 新增這段：裁切「今晨最新」前面的所有文字
+            # 裁切「今晨最新」前面的所有文字
             if "今晨最新" in body_text:
                 # 切割字串，保留「今晨最新」以及它後面的所有內容
                 body_text = "今晨最新" + body_text.split("今晨最新", 1)[1]
+
+            # 直接刪除「看完整報導」這幾個字
+            body_text = body_text.replace("看完整報導", "")
+            
+            # 裁切結尾的平台宣傳與其後的所有文字
+            tail_keyword = "以下平台上午8時同時發布早安世界"
+            if tail_keyword in body_text:
+                # 這裡取 [0]，代表我們只要這段話「前面」的內容
+                body_text = body_text.split(tail_keyword)[0]
             
         # 刪除標題的星號
         if title:
