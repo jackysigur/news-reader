@@ -62,10 +62,22 @@ def get_latest_email_text():
         mail.close()
         mail.logout()
         
-        # 清除所有 http/https 網址
+        # 整理文字內容：清除網址與特殊符號
         if body_text:
+            # 清除 http/https 網址
             body_text = re.sub(r'http[s]?://\S+', '', body_text)
+            # 刪除內文的星號
+            body_text = body_text.replace('*', '')
             
+            # 新增這段：裁切「今晨最新」前面的所有文字
+            if "今晨最新" in body_text:
+                # 切割字串，保留「今晨最新」以及它後面的所有內容
+                body_text = "今晨最新" + body_text.split("今晨最新", 1)[1]
+            
+        # 刪除標題的星號
+        if title:
+            title = title.replace('*', '')
+        
         return title, body_text
         
     except Exception as e:
